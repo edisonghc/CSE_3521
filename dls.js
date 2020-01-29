@@ -52,7 +52,7 @@ function depth_limited_search(initial_state,depth_limit) {
     current = open[open.length - 1];
     
     //3. Jump to (8) if already in Closed
-    if (!closed.has(state_to_uniqueid(current.state))) {
+    //if (!closed.has(state_to_uniqueid(current.state))) {
       
       //4. Check if state is a goal state (done if so)
       if (is_goal_state(current.state)) {
@@ -86,8 +86,9 @@ function depth_limited_search(initial_state,depth_limit) {
 
       }
 
-      //8. Repeat from (2)
-    }
+    //}
+
+    //8. Repeat from (2)
   }
 
   /*
