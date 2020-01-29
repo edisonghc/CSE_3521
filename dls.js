@@ -47,7 +47,7 @@ function depth_limited_search(initial_state,depth_limit) {
     depth: 0
   });
 
-  while (!found && open.length-1 <= depth_limit && open.length >= 0) {
+  while (!found && open.length-1 <= depth_limit && open.length > 0) {
     
     //2. Choose/remove one state from Open
     current = open[open.length - 1];
@@ -64,39 +64,34 @@ function depth_limited_search(initial_state,depth_limit) {
 
         //5. Get child states using successor function
         let successors = find_successors(current.state);
-        
+        let end = false;
         for(let i=0;i<successors.length;i++){
-          element = successors[i];
+        
+          let element = successors[i];
+          
           if (!visited.has(state_to_uniqueid(element.resultState))) {
+            
+            let predecessor_path = current.predecessor.map(x => x);
+            predecessor_path.push(current.state);
+  
+            let action_path = current.action.map(x => x);
+            action_path.push(element.actionID);
+
             open.push({
               state: element.resultState,
-              predecessor: [],
-              action: [],
-              depth: 0
+              predecessor: predecessor_path,
+              action: action_path,
+              depth: current.depth + 1
             });
             break;
           }
+          if(i==successors.length-1){
+            end = true;
+          }
         }
-
-        while (has_unvisited) {
-          
-          element = successors.shift();
-
-          let predecessor_path = current.predecessor.map(x => x);
-          predecessor_path.push(current.state);
-
-          let action_path = current.action.map(x => x);
-          action_path.push(element.actionID);
-
-          //6. Insert children into Open
-          open.push({
-            state: element.resultState,
-            predecessor: predecessor_path,
-            action: action_path,
-            depth: current.depth + 1
-          })
+        if(end){
+          open.pop();
         }
-
       }
       //7. Insert original state into visited
       visited.add(state_to_uniqueid(current.state));
@@ -133,8 +128,8 @@ function depth_limited_search(initial_state,depth_limit) {
   /***Your code to generate solution path here***/
 
   if (found) {
-    current.predecessor.shift();
     current.predecessor.push(current.state)
+    current.predecessor.shift();
     return {
       actions: current.action /*array of action ids*/,
       states: current.predecessor /*array of states*/
