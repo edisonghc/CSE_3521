@@ -15,7 +15,7 @@ function breadth_first_search(initial_state) {
 	let current={
 		state: [],
 		predecessor: [],
-		action: [], //will be defined later
+		action: []
 	};
 
 	let found = false;
@@ -25,7 +25,7 @@ function breadth_first_search(initial_state) {
 	open.push({
 		state: initial_state,
 		predecessor: [],
-		action: [] //will be defined later
+		action: []
 	});
 
 	while(!found && open.length!=0) {
