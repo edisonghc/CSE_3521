@@ -33,7 +33,7 @@ function depth_limited_search(initial_state,depth_limit) {
   let current = {
     state: [],
     predecessor: [],
-    action: [],
+    action: []
   };
 
   let found = false;
