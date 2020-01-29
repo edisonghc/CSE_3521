@@ -6,12 +6,12 @@
 //  actions: Sequence(Array) of action ids required to reach the goal state from the initial state
 //  states: Sequence(Array) of states that are moved through, ending with the reached goal state (and EXCLUDING the initial state)
 //  The actions and states arrays should both have the same length.
-function depth_limited_search(initial_state,depth_limit) {
+function depth_limited_search(initial_state, depth_limit) {
 
   /***Your code for depth-limited search here!***/
-  
+
   /***DO NOT do repeated state or loop checking!***/
-  
+
   /*
     Hint: You may implement DLS either iteratively (with open set) or recursively.
     
@@ -47,36 +47,40 @@ function depth_limited_search(initial_state,depth_limit) {
     depth: 0
   });
 
-  while (!found && open.length-1 <= depth_limit && open.length > 0) {
-    
+  while (!found && open.length > 0) {
+
     //2. Choose/remove one state from Open
     current = open[open.length - 1];
-    
+
     //3. Jump to (8) if already in visited
     if (!visited.has(state_to_uniqueid(current.state))) {
+      //7. Insert original state into visited
+      visited.add(state_to_uniqueid(current.state));
+    }
 
-      //4. Check if state is a goal state (done if so)
-      if (is_goal_state(current.state)) {
-        found = true;
-      }
+    //4. Check if state is a goal state (done if so)
+    if (is_goal_state(current.state)) {
+      found = true;
+    }
 
-      else {
+    else {
 
-        //5. Get child states using successor function
-        let successors = find_successors(current.state);
-        let end = false;
-        for(let i=0;i<successors.length;i++){
-        
+      //5. Get child states using successor function
+      let successors = find_successors(current.state);
+      let end = false;
+      if(open.length - 1 < depth_limit ){
+        for (let i = 0; i < successors.length; i++) {
+
           let element = successors[i];
-          
+  
           if (!visited.has(state_to_uniqueid(element.resultState))) {
-            
+  
             let predecessor_path = current.predecessor.map(x => x);
             predecessor_path.push(current.state);
   
             let action_path = current.action.map(x => x);
             action_path.push(element.actionID);
-
+  
             open.push({
               state: element.resultState,
               predecessor: predecessor_path,
@@ -85,21 +89,25 @@ function depth_limited_search(initial_state,depth_limit) {
             });
             break;
           }
-          if(i==successors.length-1){
+          if (i == successors.length - 1) {
             end = true;
           }
         }
-        if(end){
-          open.pop();
-        }
       }
-      //7. Insert original state into visited
-      visited.add(state_to_uniqueid(current.state));
+      else{
+        end = true;
+      }
+      
+      if (end) {
+        open.pop();
+      }
     }
 
-    else{
-      open.pop();
-    }
+
+
+    //else{
+    // open.pop();
+    // }
 
     //8. Repeat from (2)
   }
