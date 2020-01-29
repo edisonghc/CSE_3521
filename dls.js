@@ -103,12 +103,6 @@ function depth_limited_search(initial_state, depth_limit) {
       }
     }
 
-
-
-    //else{
-    // open.pop();
-    // }
-
     //8. Repeat from (2)
   }
 
