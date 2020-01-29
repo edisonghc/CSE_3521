@@ -38,8 +38,7 @@ function depth_limited_search(initial_state,depth_limit) {
 
   let found = false;
 
-  //add initial, add adj nodes to queue, pop current from queue into closed
-
+  //1. Initialize Open to contain initial state
   open.push({
     state: initial_state,
     predecessor: [],
@@ -47,16 +46,22 @@ function depth_limited_search(initial_state,depth_limit) {
     depth: 0
   });
 
-  while (!found && open.length != 0) {
-    current = open.shift();
-
+  while (!found && open.length-1 <= depth_limit) {
+    
+    //2. Choose/remove one state from Open
+    current = open[open.length - 1];
+    
+    //3. Jump to (8) if already in Closed
     if (!closed.has(state_to_uniqueid(current.state))) {
-
+      
+      //4. Check if state is a goal state (done if so)
       if (is_goal_state(current.state)) {
         found = true;
       }
 
       else {
+
+        //5. Get child states using successor function
         let successors = find_successors(current.state);
         while (successors.length != 0) {
 
@@ -68,15 +73,20 @@ function depth_limited_search(initial_state,depth_limit) {
           let action_path = current.action.map(x => x);
           action_path.push(element.actionID);
 
+          //6. Insert children into Open
           open.push({
             state: element.resultState,
             predecessor: predecessor_path,
             action: action_path
           })
         }
+
+        //7. Insert original state into Closed
         closed.add(state_to_uniqueid(current.state));
 
       }
+
+      //8. Repeat from (2)
     }
   }
 
