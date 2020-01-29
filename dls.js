@@ -26,7 +26,7 @@ function depth_limited_search(initial_state,depth_limit) {
 
   let open = []; //See push()/pop() and unshift()/shift() to operate like stack or queue
   //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
-  //let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+  let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
   /***Your code for depth-first search here***/
 
@@ -43,7 +43,8 @@ function depth_limited_search(initial_state,depth_limit) {
   open.push({
     state: initial_state,
     predecessor: [],
-    action: []
+    action: [],
+    depth: 0
   });
 
   while (!found && open.length != 0) {
