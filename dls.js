@@ -9,7 +9,7 @@
 function depth_limited_search(initial_state,depth_limit) {
 
   /***Your code for depth-limited search here!***/
-  //test
+  
   /***DO NOT do repeated state or loop checking!***/
   
   /*
