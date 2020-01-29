@@ -26,14 +26,15 @@ function depth_limited_search(initial_state,depth_limit) {
 
   let open = []; //See push()/pop() and unshift()/shift() to operate like stack or queue
   //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
-  let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+  let visited = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
   /***Your code for depth-first search here***/
 
   let current = {
     state: [],
     predecessor: [],
-    action: []
+    action: [],
+    depth: 0
   };
 
   let found = false;
@@ -51,8 +52,8 @@ function depth_limited_search(initial_state,depth_limit) {
     //2. Choose/remove one state from Open
     current = open[open.length - 1];
     
-    //3. Jump to (8) if already in Closed
-    //if (!closed.has(state_to_uniqueid(current.state))) {
+    //3. Jump to (8) if already in visited
+    //if (!visited.has(state_to_uniqueid(current.state))) {
       
       //4. Check if state is a goal state (done if so)
       if (is_goal_state(current.state)) {
@@ -63,6 +64,7 @@ function depth_limited_search(initial_state,depth_limit) {
 
         //5. Get child states using successor function
         let successors = find_successors(current.state);
+
         while (successors.length != 0) {
 
           element = successors.shift();
@@ -77,12 +79,13 @@ function depth_limited_search(initial_state,depth_limit) {
           open.push({
             state: element.resultState,
             predecessor: predecessor_path,
-            action: action_path
+            action: action_path,
+            depth: current.depth + 1
           })
         }
 
-        //7. Insert original state into Closed
-        closed.add(state_to_uniqueid(current.state));
+        //7. Insert original state into visited
+        visited.add(state_to_uniqueid(current.state));
 
       }
 
@@ -108,8 +111,8 @@ function depth_limited_search(initial_state,depth_limit) {
   object itself. The state_to_uniqueid function has been provided to help you with
   this. For example
   let state=...;
-  closed.add(state_to_uniqueid(state)); //Add state to closed set
-  if(closed.has(state_to_uniqueid(state))) { ... } //Check if state is in closed set
+  visited.add(state_to_uniqueid(state)); //Add state to visited set
+  if(visited.has(state_to_uniqueid(state))) { ... } //Check if state is in visited set
   */
 
   /***Your code to generate solution path here***/
