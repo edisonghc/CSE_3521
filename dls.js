@@ -47,14 +47,14 @@ function depth_limited_search(initial_state,depth_limit) {
     depth: 0
   });
 
-  while (!found && open.length-1 <= depth_limit) {
+  while (!found && open.length-1 <= depth_limit && open.length >= 0) {
     
     //2. Choose/remove one state from Open
     current = open[open.length - 1];
     
     //3. Jump to (8) if already in visited
-    //if (!visited.has(state_to_uniqueid(current.state))) {
-      
+    if (!visited.has(state_to_uniqueid(current.state))) {
+
       //4. Check if state is a goal state (done if so)
       if (is_goal_state(current.state)) {
         found = true;
@@ -64,9 +64,22 @@ function depth_limited_search(initial_state,depth_limit) {
 
         //5. Get child states using successor function
         let successors = find_successors(current.state);
+        
+        for(let i=0;i<successors.length;i++){
+          element = successors[i];
+          if (!visited.has(state_to_uniqueid(element.resultState))) {
+            open.push({
+              state: element.resultState,
+              predecessor: [],
+              action: [],
+              depth: 0
+            });
+            break;
+          }
+        }
 
-        while (successors.length != 0) {
-
+        while (has_unvisited) {
+          
           element = successors.shift();
 
           let predecessor_path = current.predecessor.map(x => x);
@@ -84,12 +97,14 @@ function depth_limited_search(initial_state,depth_limit) {
           })
         }
 
-        //7. Insert original state into visited
-        visited.add(state_to_uniqueid(current.state));
-
       }
+      //7. Insert original state into visited
+      visited.add(state_to_uniqueid(current.state));
+    }
 
-    //}
+    else{
+      open.pop();
+    }
 
     //8. Repeat from (2)
   }
