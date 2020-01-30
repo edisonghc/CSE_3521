@@ -20,8 +20,7 @@ function breadth_first_search(initial_state) {
 
 	let found = false;
 
-	//add initial, add adj nodes to queue, pop current from queue into closed
-
+	//1. Initialize Open to contain initial state
 	open.push({
 		state: initial_state,
 		predecessor: [],
@@ -29,16 +28,23 @@ function breadth_first_search(initial_state) {
 	});
 
 	while(!found && open.length!=0) {
+
+		//2. Choose/remove one state from Open
 		current = open.shift();
 		
+		//3. Jump to (8) if already in visited
 		if(!closed.has(state_to_uniqueid(current.state))) {
 			
+			//4. Check if state is a goal state (done if so)
 			if(is_goal_state(current.state)) {
 				found = true;
 			}
-			
 			else {
+
+				//5. Get child states using successor function
 				let successors = find_successors(current.state);
+
+				//6. Insert children into Open
 				while(successors.length!=0){
 					
 					element = successors.shift();
@@ -55,10 +61,13 @@ function breadth_first_search(initial_state) {
 						action: action_path
 					})
 				}
-				closed.add(state_to_uniqueid(current.state));
 
+				//7. Insert original state into closed
+				closed.add(state_to_uniqueid(current.state));
 			}
 		}
+
+		//8. Repeat from (2)
 	}
 	
 	/*
@@ -85,8 +94,8 @@ function breadth_first_search(initial_state) {
   /***Your code to generate solution path here***/
 	
 	if(found){
+		current.predecessor.push(current.state);
 		current.predecessor.shift();
-		current.predecessor.push(current.state)
 		return {
 			actions : current.action /*array of action ids*/,
 			states : current.predecessor /*array of states*/

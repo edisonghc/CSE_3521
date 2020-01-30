@@ -26,7 +26,7 @@ function depth_limited_search(initial_state, depth_limit) {
 
   let open = []; //See push()/pop() and unshift()/shift() to operate like stack or queue
   //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
-  let visited = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+  let closed = new Set(); //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 
   /***Your code for depth-first search here***/
 
@@ -47,64 +47,49 @@ function depth_limited_search(initial_state, depth_limit) {
     depth: 0
   });
 
-  while (!found && open.length > 0) {
+  while(!found && open.length!=0) {
 
     //2. Choose/remove one state from Open
-    current = open[open.length - 1];
-
+		current = open.pop();
+    
     //3. Jump to (8) if already in visited
-    if (!visited.has(state_to_uniqueid(current.state))) {
-      //7. Insert original state into visited
-      visited.add(state_to_uniqueid(current.state));
-    }
-
-    //4. Check if state is a goal state (done if so)
-    if (is_goal_state(current.state)) {
-      found = true;
-    }
-
-    else {
-
-      //5. Get child states using successor function
-      let successors = find_successors(current.state);
-      let end = false;
-      if(open.length - 1 < depth_limit ){
-        for (let i = 0; i < successors.length; i++) {
-
-          let element = successors[i];
-  
-          if (!visited.has(state_to_uniqueid(element.resultState))) {
-  
-            let predecessor_path = current.predecessor.map(x => x);
-            predecessor_path.push(current.state);
-  
-            let action_path = current.action.map(x => x);
-            action_path.push(element.actionID);
-  
-            open.push({
-              state: element.resultState,
-              predecessor: predecessor_path,
-              action: action_path,
-              depth: current.depth + 1
-            });
-            break;
-          }
-          if (i == successors.length - 1) {
-            end = true;
-          }
-        }
-      }
-      else{
-        end = true;
-      }
+		if(!closed.has(state_to_uniqueid(current.state)) && current.depth<depth_limit) {
       
-      if (end) {
-        open.pop();
-      }
+      //4. Check if state is a goal state (done if so)
+			if(is_goal_state(current.state)) {
+				found = true;
+			}
+			else {
+
+        //5. Get child states using successor function
+        let successors = find_successors(current.state);
+        
+        //6. Insert children into Open
+				while(successors.length!=0){
+					
+					element = successors.shift();
+
+					let predecessor_path = current.predecessor.map(x => x);
+					predecessor_path.push(current.state);
+
+					let action_path = current.action.map(x => x);
+					action_path.push(element.actionID);
+          
+					open.push({
+						state: element.resultState,
+						predecessor: predecessor_path,
+            action: action_path,
+            depth: current.depth + 1
+					})
+        }
+        
+        //7. Insert original state into visited
+				closed.add(state_to_uniqueid(current.state));
+			}
     }
 
     //8. Repeat from (2)
-  }
+	}
 
   /*
   Hint: In order to generate the solution path, you will need to augment
@@ -130,8 +115,8 @@ function depth_limited_search(initial_state, depth_limit) {
   /***Your code to generate solution path here***/
 
   if (found) {
-    current.predecessor.push(current.state)
     current.predecessor.shift();
+    current.predecessor.push(current.state);
     return {
       actions: current.action /*array of action ids*/,
       states: current.predecessor /*array of states*/
