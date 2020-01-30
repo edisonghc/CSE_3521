@@ -38,10 +38,15 @@ ID | Action
 //Returns: true if is goal state, false otherwise
 function is_goal_state(state) {
   ++helper_eval_state_count; //Keep track of how many states are evaluated (DO NOT REMOVE!)
-  //***Your code to check for goal state here!***
-  return (state.grid[0][0]==1 && state.grid[0][1]==2 && state.grid[0][2]==3 &&
-					state.grid[1][0]==8 && state.grid[1][1]==0 && state.grid[1][2]==4 &&
-					state.grid[2][0]==7 && state.grid[2][1]==6 && state.grid[2][2]==5);
+	//***Your code to check for goal state here!***
+	goal=[ [1, 2, 3], [8, 0, 4], [7, 6, 5] ]
+	rs = true;
+	for(let j=0;j<3;++j){
+    for(let i=0;i<3;++i) {
+      rs = state.grid[j][i]==goal[j][i] && rs;
+		}
+	}
+  return (rs);
 }
 
 //Find the list of actions that can be performed from the given state and the new
