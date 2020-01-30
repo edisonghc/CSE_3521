@@ -12,4 +12,15 @@ function iterative_deepening_search(initial_state) {
   /*
     Hint: Re-use/call your depth-limited search function here to avoid extra work.
   */
+ 
+  rs = null;
+
+  let i = 0;
+  while(rs == null){
+    rs = depth_limited_search(initial_state,i);
+    i++;
+  }
+
+  return rs;
+
 }
