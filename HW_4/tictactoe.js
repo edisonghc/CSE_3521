@@ -39,6 +39,7 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
     }
 
   let cur_score = 0;
+  let cur_move = null;
   if(cur_player==cpu_player){cur_score = -Infinity}else{cur_score = Infinity}
 
   ++helper_expand_state_count; //DO NOT REMOVE
@@ -64,12 +65,12 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
     ***********************/
     
     if(cur_player==cpu_player && results.score>cur_score){
-      cur_score = result.score;
-      let cur_move = results.move;
+      cur_score = results.score;
+      cur_move = results.move;
     }
-    else if(cur_play!=cpu_player && results.score<cur_score){
-      cur_score = result.score;
-      let cur_move = results.move;
+    else if(cur_player!=cpu_player && results.score<cur_score){
+      cur_score = results.score;
+      cur_move = results.move;
     }
 
   }
@@ -144,7 +145,7 @@ function utility(board,player) {
 
   for (let j=0; j<3; j++){
 	  win = win || ((board[3*j]==player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]));
-	  win = win || ((board[j]==player) && (board[j]==board[j+3]) && (board[i]==board[j+6]));
+	  win = win || ((board[j]==player) && (board[j]==board[j+3]) && (board[j]==board[j+6]));
   	  loss = loss || ((board[3*j]!=-1 && board[3*j]!=player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]));
 	  loss = loss || ((board[j]!=-1 && board[j]!=player) && (board[j]==board[j+3]) && (board[j]==board[j+6]));
   }
