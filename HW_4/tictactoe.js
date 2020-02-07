@@ -194,9 +194,9 @@ function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta)
 
     //RECURSION
     // What will my opponent do if I make this move?
-    let results = tictactoe_minimax(new_board, cpu_player, 1 - cur_player);
+    let results = tictactoe_minimax_alphabeta(new_board, cpu_player, 1 - cur_player, -Infinity, Infinity);
 
-    //MINIMAX
+    //MINIMAX_ALPHA_BETA_PRUNING
     /***********************
     * TASK: Implement minimax here. (What do you do with results.move and results.score ?)
     * 
@@ -207,11 +207,21 @@ function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta)
 
     if (cur_player == cpu_player && results.score > cur_score) {
       cur_score = results.score;
+      alpha = result.score;
       cur_move = move;
     }
     else if (cur_player != cpu_player && results.score < cur_score) {
       cur_score = results.score;
+      beta = result.score;
       cur_move = move;
+      
+      if (alpha > beta) {
+        return{
+          move: null,
+          score: -Infinity/* And here? */
+        };
+      }
+
     }
 
   }
