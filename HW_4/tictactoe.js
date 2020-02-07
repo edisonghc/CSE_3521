@@ -40,7 +40,7 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
 
   let cur_score = 0;
   let cur_move = null;
-  if(cur_player==cpu_player){cur_score = -Infinity}else{cur_score = Infinity}
+  cur_player==cpu_player?cur_score = -Infinity:cur_score = Infinity
 
   ++helper_expand_state_count; //DO NOT REMOVE
   //GENERATE SUCCESSORS
@@ -66,11 +66,11 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
     
     if(cur_player==cpu_player && results.score>cur_score){
       cur_score = results.score;
-      cur_move = results.move;
+      cur_move = move;
     }
     else if(cur_player!=cpu_player && results.score<cur_score){
       cur_score = results.score;
-      cur_move = results.move;
+      cur_move = move;
     }
 
   }
