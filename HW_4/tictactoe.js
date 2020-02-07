@@ -38,6 +38,9 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
       score:utility(board,cpu_player) //How good was this result for us?
     }
 
+  let cur_score = 0;
+  if(cur_player==cpu_player){cur_score = -Infinity}else{cur_score = Infinity}
+
   ++helper_expand_state_count; //DO NOT REMOVE
   //GENERATE SUCCESSORS
   for(let move of move_expand_order) { //For each possible move (i.e., action)
@@ -59,13 +62,23 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
     *
     * Hint: Should you find yourself in need of a very large number, try Infinity or -Infinity
     ***********************/
+    
+    if(cur_player==cpu_player && results.score>cur_score){
+      cur_score = result.score;
+      let cur_move = results.move;
+    }
+    else if(cur_play!=cpu_player && results.score<cur_score){
+      cur_score = result.score;
+      let cur_move = results.move;
+    }
+
   }
 
   //Return results gathered from all sucessors (moves).
   //Which was the "best" move?  
   return {
-    move: 0/* What do you return here? */,
-    score: 0/* And here? */
+    move: cur_move/* What do you return here? */,
+    score: cur_score/* And here? */
   };
 }
 
