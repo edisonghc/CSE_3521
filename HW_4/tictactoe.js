@@ -207,18 +207,18 @@ function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta)
 
     if (cur_player == cpu_player && results.score > cur_score) {
       cur_score = results.score;
-      alpha = result.score;
+      alpha = results.score;
       cur_move = move;
     }
     else if (cur_player != cpu_player && results.score < cur_score) {
       cur_score = results.score;
-      beta = result.score;
+      beta = results.score;
       cur_move = move;
       
       if (alpha > beta) {
         return{
           move: null,
-          score: -Infinity/* And here? */
+          score: -Infinity
         };
       }
 
