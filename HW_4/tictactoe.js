@@ -145,8 +145,8 @@ function utility(board,player) {
   for (let j=0; j<3; j++){
 	  win = win || ((board[3*j]==player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]));
 	  win = win || ((board[j]==player) && (board[j]==board[j+3]) && (board[i]==board[j+6]));
-  	  loss = loss || ((board[3*j]!=-1 && board[3*j]!=player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]);
-	  loss = loss || ((board[j]!=-1 && board[j]!=player) && (board[j]==board[j+3]) && (board[j]==board[j+6]);
+  	  loss = loss || ((board[3*j]!=-1 && board[3*j]!=player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]));
+	  loss = loss || ((board[j]!=-1 && board[j]!=player) && (board[j]==board[j+3]) && (board[j]==board[j+6]));
   }
 
 	  win = win || (board[4]==player && (((board[4]==board[0]) && (board[4]==board[8])) || ((board[4]==board[2]) && (board[4]==board[6]))));
