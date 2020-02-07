@@ -91,8 +91,8 @@ function is_terminal(board) {
   
   rs = rs || (board[4]!=-1 && (((board[4]==board[0]) && (board[4]==board[8])) || ((board[4]==board[2]) && (board[4]==board[6]))));
   
-  for(let e of board){
-    draw = draw && e!=-1;
+  for(let move of move_expand_order){
+    draw = draw && board[move]!=-1;
   }
 
   return rs || draw;
