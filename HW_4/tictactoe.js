@@ -64,8 +64,8 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
   //Return results gathered from all sucessors (moves).
   //Which was the "best" move?  
   return {
-    move: /* What do you return here? */,
-    score: /* And here? */
+    move: 0/* What do you return here? */,
+    score: 0/* And here? */
   };
 }
 
@@ -77,7 +77,25 @@ function is_terminal(board) {
   * Return true if the game is finished (i.e, a draw or someone has won)
   * Return false if the game is incomplete
   *************************/
-  return false;
+
+  let rs = false;
+  let row = false;
+  let col = false;
+  let draw = true;
+  
+  for(let i=0; i<3; i++){
+    row = row || ((board[3*i]!=-1) && (board[3*i]==board[3*i+1]) && (board[3*i]==board[3*i+2]));
+    col = col || ((board[i]!=-1) && (board[i]==board[i+3]) && (board[i]==board[i+6]));
+    rs = row || col;
+  }
+  
+  rs = rs || (board[4]!=-1 && (((board[4]==board[0]) && (board[4]==board[8])) || ((board[4]==board[2]) && (board[4]==board[6]))));
+  
+  for(let e of board){
+    draw = draw && e!=-1;
+  }
+
+  return rs || draw;
 }
 
 function utility(board,player) {
