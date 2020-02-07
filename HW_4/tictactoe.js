@@ -1,11 +1,11 @@
 //Define the order in which to examine/expand possible moves
 //(This affects alpha-beta pruning performance)
-let move_expand_order=[0,1,2,3,4,5,6,7,8]; //Naive (linear) ordering
+let move_expand_order = [0, 1, 2, 3, 4, 5, 6, 7, 8]; //Naive (linear) ordering
 //let move_expand_order=[4,0,1,2,3,5,6,7,8]; //Better ordering?
 
 /////////////////////////////////////////////////////////////////////////////
 
-function tictactoe_minimax(board,cpu_player,cur_player) {
+function tictactoe_minimax(board, cpu_player, cur_player) {
   /***********************************************************
   * board: game state, an array representing a tic-tac-toe board
   * The positions correspond as follows
@@ -32,28 +32,28 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
   ***********************************************************/
 
   //BASE CASE
-  if(is_terminal(board)) //Stop if game is over
+  if (is_terminal(board)) //Stop if game is over
     return {
-      move:null,
-      score:utility(board,cpu_player) //How good was this result for us?
+      move: null,
+      score: utility(board, cpu_player) //How good was this result for us?
     }
 
   let cur_score = 0;
   let cur_move = null;
-  cur_player==cpu_player?cur_score = -Infinity:cur_score = Infinity
+  cur_player == cpu_player ? cur_score = -Infinity : cur_score = Infinity
 
   ++helper_expand_state_count; //DO NOT REMOVE
   //GENERATE SUCCESSORS
-  for(let move of move_expand_order) { //For each possible move (i.e., action)
-    if(board[move]!=-1) continue; //Already taken, can't move here (i.e., successor not valid)
-    
-    let new_board=board.slice(0); //Copy
-    new_board[move]=cur_player; //Apply move
+  for (let move of move_expand_order) { //For each possible move (i.e., action)
+    if (board[move] != -1) continue; //Already taken, can't move here (i.e., successor not valid)
+
+    let new_board = board.slice(0); //Copy
+    new_board[move] = cur_player; //Apply move
     //Successor state: new_board
 
     //RECURSION
     // What will my opponent do if I make this move?
-    let results=tictactoe_minimax(new_board,cpu_player,1-cur_player);
+    let results = tictactoe_minimax(new_board, cpu_player, 1 - cur_player);
 
     //MINIMAX
     /***********************
@@ -63,12 +63,12 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
     *
     * Hint: Should you find yourself in need of a very large number, try Infinity or -Infinity
     ***********************/
-    
-    if(cur_player==cpu_player && results.score>cur_score){
+
+    if (cur_player == cpu_player && results.score > cur_score) {
       cur_score = results.score;
       cur_move = move;
     }
-    else if(cur_player!=cpu_player && results.score<cur_score){
+    else if (cur_player != cpu_player && results.score < cur_score) {
       cur_score = results.score;
       cur_move = move;
     }
@@ -85,7 +85,7 @@ function tictactoe_minimax(board,cpu_player,cur_player) {
 
 function is_terminal(board) {
   ++helper_eval_state_count; //DO NOT REMOVE
-  
+
   /*************************
   * TASK: Implement the terminal test
   * Return true if the game is finished (i.e, a draw or someone has won)
@@ -96,23 +96,23 @@ function is_terminal(board) {
   let row = false;
   let col = false;
   let draw = true;
-  
-  for(let i=0; i<3; i++){
-    row = row || ((board[3*i]!=-1) && (board[3*i]==board[3*i+1]) && (board[3*i]==board[3*i+2]));
-    col = col || ((board[i]!=-1) && (board[i]==board[i+3]) && (board[i]==board[i+6]));
+
+  for (let i = 0; i < 3; i++) {
+    row = row || ((board[3 * i] != -1) && (board[3 * i] == board[3 * i + 1]) && (board[3 * i] == board[3 * i + 2]));
+    col = col || ((board[i] != -1) && (board[i] == board[i + 3]) && (board[i] == board[i + 6]));
     rs = row || col;
   }
-  
-  rs = rs || (board[4]!=-1 && (((board[4]==board[0]) && (board[4]==board[8])) || ((board[4]==board[2]) && (board[4]==board[6]))));
-  
-  for(let move of move_expand_order){
-    draw = draw && board[move]!=-1;
+
+  rs = rs || (board[4] != -1 && (((board[4] == board[0]) && (board[4] == board[8])) || ((board[4] == board[2]) && (board[4] == board[6]))));
+
+  for (let move of move_expand_order) {
+    draw = draw && board[move] != -1;
   }
 
   return rs || draw;
 }
 
-function utility(board,player) {
+function utility(board, player) {
   /***********************
   * TASK: Implement the utility function
   *
@@ -132,37 +132,37 @@ function utility(board,player) {
   * Hint: You can find the number of turns by counting the number of non-blank spaces
   *       (Or the number of turns remaining by counting blank spaces.)
   ***********************/
-  
+
   let scr = 0;
   let empty = 9;
   let win = false;
   let loss = false;
 
-  for (let i=0; i<9; i++){
-	  if (board[i]!=-1)
-	  	empty--;
+  for (let i = 0; i < 9; i++) {
+    if (board[i] != -1)
+      empty--;
   }
 
-  for (let j=0; j<3; j++){
-	  win = win || ((board[3*j]==player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]));
-	  win = win || ((board[j]==player) && (board[j]==board[j+3]) && (board[j]==board[j+6]));
-  	  loss = loss || ((board[3*j]!=-1 && board[3*j]!=player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]));
-	  loss = loss || ((board[j]!=-1 && board[j]!=player) && (board[j]==board[j+3]) && (board[j]==board[j+6]));
+  for (let j = 0; j < 3; j++) {
+    win = win || ((board[3 * j] == player) && (board[3 * j] == board[3 * j + 1]) && (board[3 * j] == board[3 * j + 2]));
+    win = win || ((board[j] == player) && (board[j] == board[j + 3]) && (board[j] == board[j + 6]));
+    loss = loss || ((board[3 * j] != -1 && board[3 * j] != player) && (board[3 * j] == board[3 * j + 1]) && (board[3 * j] == board[3 * j + 2]));
+    loss = loss || ((board[j] != -1 && board[j] != player) && (board[j] == board[j + 3]) && (board[j] == board[j + 6]));
   }
 
-	  win = win || (board[4]==player && (((board[4]==board[0]) && (board[4]==board[8])) || ((board[4]==board[2]) && (board[4]==board[6]))));
-	  loss = loss || ((board[4]!=-1 && board[4]!=player) && (((board[4]==board[0]) && (board[4]==board[8])) || ((board[4]==board[2]) && (board[4]==board[6]))));
+  win = win || (board[4] == player && (((board[4] == board[0]) && (board[4] == board[8])) || ((board[4] == board[2]) && (board[4] == board[6]))));
+  loss = loss || ((board[4] != -1 && board[4] != player) && (((board[4] == board[0]) && (board[4] == board[8])) || ((board[4] == board[2]) && (board[4] == board[6]))));
 
   if (win)
-	  scr += empty + 1;
+    scr += empty + 1;
 
   if (loss)
-	  scr -= empty - 1;
+    scr -= empty - 1;
 
-  return scr;  
+  return scr;
 }
 
-function tictactoe_minimax_alphabeta(board,cpu_player,cur_player,alpha,beta) {
+function tictactoe_minimax_alphabeta(board, cpu_player, cur_player, alpha, beta) {
   /***********************
   * TASK: Implement Alpha-Beta Pruning
   *
@@ -171,9 +171,60 @@ function tictactoe_minimax_alphabeta(board,cpu_player,cur_player,alpha,beta) {
   *
   * Hint: Make sure you update the recursive function call to call this function!
   ***********************/
+
+  //BASE CASE
+  if (is_terminal(board)) //Stop if game is over
+    return {
+      move: null,
+      score: utility(board, cpu_player) //How good was this result for us?
+    }
+
+  let cur_score = 0;
+  let cur_move = null;
+  cur_player == cpu_player ? cur_score = -Infinity : cur_score = Infinity
+
+  ++helper_expand_state_count; //DO NOT REMOVE
+  //GENERATE SUCCESSORS
+  for (let move of move_expand_order) { //For each possible move (i.e., action)
+    if (board[move] != -1) continue; //Already taken, can't move here (i.e., successor not valid)
+
+    let new_board = board.slice(0); //Copy
+    new_board[move] = cur_player; //Apply move
+    //Successor state: new_board
+
+    //RECURSION
+    // What will my opponent do if I make this move?
+    let results = tictactoe_minimax(new_board, cpu_player, 1 - cur_player);
+
+    //MINIMAX
+    /***********************
+    * TASK: Implement minimax here. (What do you do with results.move and results.score ?)
+    * 
+    * Hint: You will need a little code outside the loop as well, but the main work goes here.
+    *
+    * Hint: Should you find yourself in need of a very large number, try Infinity or -Infinity
+    ***********************/
+
+    if (cur_player == cpu_player && results.score > cur_score) {
+      cur_score = results.score;
+      cur_move = move;
+    }
+    else if (cur_player != cpu_player && results.score < cur_score) {
+      cur_score = results.score;
+      cur_move = move;
+    }
+
+  }
+
+  //Return results gathered from all sucessors (moves).
+  //Which was the "best" move?  
+  return {
+    move: cur_move/* What do you return here? */,
+    score: cur_score/* And here? */
+  };
 }
 
-function debug(board,human_player) {
+function debug(board, human_player) {
   /***********************
   * This function is run whenever you click the "Run debug function" button.
   *
@@ -184,10 +235,10 @@ function debug(board,human_player) {
   ***********************/
   helper_log_write("Testing board:");
   helper_log_board(board);
-  
-  let tm=is_terminal(board);
-  helper_log_write("is_terminal() returns "+(tm?"true":"false"));
 
-  let u=utility(board,human_player);
-  helper_log_write("utility() returns "+u+" (w.r.t. human player selection)");
+  let tm = is_terminal(board);
+  helper_log_write("is_terminal() returns " + (tm ? "true" : "false"));
+
+  let u = utility(board, human_player);
+  helper_log_write("utility() returns " + u + " (w.r.t. human player selection)");
 }
