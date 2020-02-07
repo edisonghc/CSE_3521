@@ -131,6 +131,34 @@ function utility(board,player) {
   * Hint: You can find the number of turns by counting the number of non-blank spaces
   *       (Or the number of turns remaining by counting blank spaces.)
   ***********************/
+  
+  let scr = 0;
+  let empty = 9;
+  let win = false;
+  let loss = false;
+
+  for (let i=0; i<9; i++){
+	  if (board[i]!=-1)
+	  	empty--;
+  }
+
+  for (let j=0; j<3; j++){
+	  win = win || ((board[3*j]==player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]));
+	  win = win || ((board[j]==player) && (board[j]==board[j+3]) && (board[i]==board[j+6]));
+  	  loss = loss || ((board[3*j]!=-1 && board[3*j]!=player) && (board[3*j]==board[3*j+1]) && (board[3*j]==board[3*j+2]);
+	  loss = loss || ((board[j]!=-1 && board[j]!=player) && (board[j]==board[j+3]) && (board[j]==board[j+6]);
+  }
+
+	  win = win || (board[4]==player && (((board[4]==board[0]) && (board[4]==board[8])) || ((board[4]==board[2]) && (board[4]==board[6]))));
+	  loss = loss || ((board[4]!=-1 && board[4]!=player) && (((board[4]==board[0]) && (board[4]==board[8])) || ((board[4]==board[2]) && (board[4]==board[6]))));
+
+  if (win)
+	  scr += empty + 1;
+
+  if (loss)
+	  scr -= empty - 1;
+
+  return scr;  
 }
 
 function tictactoe_minimax_alphabeta(board,cpu_player,cur_player,alpha,beta) {
